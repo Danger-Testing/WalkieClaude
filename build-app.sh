@@ -26,4 +26,7 @@ if [ -d "$BUILD_DIR/WalkieClaude_WalkieClaude.bundle" ]; then
     cp -r "$BUILD_DIR/WalkieClaude_WalkieClaude.bundle" "$APP_DIR/Contents/Resources/"
 fi
 
-echo "✓ Built WalkieClaude.app"
+# Install to /Applications
+cp -r "$APP_DIR" /Applications/WalkieClaude.app
+
+echo "✓ Built and installed WalkieClaude.app"
