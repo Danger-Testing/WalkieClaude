@@ -43,14 +43,14 @@ final class WalkieViewModel: ObservableObject {
     func startTransmitting() {
         isListening = true
         liveTranscription = ""
-        SoundEffects.playChirp()
+        SoundEffects.playBeep()
         speechService.startListening()
     }
 
     func stopTransmitting() {
         isListening = false
         speechService.stopListening()
-        SoundEffects.playEnd()
+        SoundEffects.playBeep()
 
         let text = liveTranscription.trimmingCharacters(in: .whitespacesAndNewlines)
         liveTranscription = ""
@@ -76,6 +76,8 @@ final class WalkieViewModel: ObservableObject {
             let history = messages.dropLast().suffix(10).map { (role: $0.role.rawValue, content: $0.content) }
             let stream = cliService.sendMessage(trimmed, history: Array(history))
 
+            SoundEffects.playTalking()
+
             for await chunk in stream {
                 partialResponse += chunk
             }
@@ -85,6 +87,8 @@ final class WalkieViewModel: ObservableObject {
             messages.append(assistantMessage)
             partialResponse = ""
             isProcessing = false
+
+            SoundEffects.playSuccess()
 
             if isSpeakingEnabled {
                 speechService.speak(finalText)
