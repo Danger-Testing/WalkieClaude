@@ -11,14 +11,15 @@ final class CLIService: @unchecked Sendable {
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: self.claudePath)
 
-                // Build prompt with conversation history for context
+                // Build prompt — history is context only, do NOT repeat past actions
                 var fullPrompt = ""
                 if !history.isEmpty {
-                    fullPrompt += "Previous conversation:\n"
+                    fullPrompt += "[CONTEXT ONLY — these tasks are already done, do not repeat them]\n"
                     for turn in history {
-                        fullPrompt += "\(turn.role == "user" ? "User" : "Assistant"): \(turn.content)\n"
+                        let label = turn.role == "user" ? "User said" : "You responded"
+                        fullPrompt += "\(label): \(turn.content)\n"
                     }
-                    fullPrompt += "\nCurrent request: \(text)"
+                    fullPrompt += "[END CONTEXT]\n\nNew request to execute now: \(text)"
                 } else {
                     fullPrompt = text
                 }
