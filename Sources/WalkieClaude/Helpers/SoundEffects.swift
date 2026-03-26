@@ -1,20 +1,18 @@
 import AVFoundation
 
 struct SoundEffects {
-    private static let queue = DispatchQueue(label: "com.walkieclaude.sounds")
     private static var players: [AVAudioPlayer] = []
 
     static func playBeep() {
-        queue.async { _play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/beep-one.mp4") }
+        DispatchQueue.main.async { _play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/beep-one.mp4") }
     }
 
     static func playTalking() {
-        queue.async { _play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/talking-walkie.mp4", loops: true) }
+        DispatchQueue.main.async { _play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/talking-walkie.mp4", loops: true) }
     }
 
     static func playSuccess() {
-        queue.async {
-            // Kill everything immediately, then play success
+        DispatchQueue.main.async {
             players.forEach { $0.stop() }
             players.removeAll()
             _play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/success.mp4")
