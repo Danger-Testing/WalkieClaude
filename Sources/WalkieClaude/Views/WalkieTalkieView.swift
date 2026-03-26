@@ -3,6 +3,7 @@ import SwiftUI
 struct WalkieTalkieView: View {
     @StateObject private var viewModel = WalkieViewModel()
     @State private var inputText = ""
+    @State private var apiKeyInput = ""
 
     var body: some View {
         ZStack {
@@ -243,6 +244,47 @@ struct WalkieTalkieView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)
+            }
+            // API key entry overlay
+            if !viewModel.hasAPIKey {
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(Color(nsColor: NSColor(red: 0.08, green: 0.08, blue: 0.09, alpha: 0.97)))
+                VStack(spacing: 20) {
+                    Image(systemName: "key.fill")
+                        .font(.system(size: 32))
+                        .foregroundColor(.orange)
+                    Text("ENTER API KEY")
+                        .font(.system(size: 14, weight: .heavy, design: .monospaced))
+                        .foregroundColor(.orange)
+                    Text("Get yours at console.anthropic.com")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(.gray)
+                    SecureField("sk-ant-...", text: $apiKeyInput)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundColor(.white)
+                        .padding(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color(white: 0.15))
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(white: 0.25), lineWidth: 1))
+                        )
+                        .onSubmit { viewModel.setAPIKey(apiKeyInput) }
+                    Button {
+                        viewModel.setAPIKey(apiKeyInput)
+                    } label: {
+                        Text("CONNECT")
+                            .font(.system(size: 12, weight: .bold, design: .monospaced))
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(Color.orange)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+                .padding(32)
             }
         }
         .frame(width: 320, height: 480)

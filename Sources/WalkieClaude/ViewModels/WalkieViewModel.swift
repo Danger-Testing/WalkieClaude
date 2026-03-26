@@ -22,13 +22,13 @@ final class WalkieViewModel: ObservableObject {
     private let cliService = CLIService()
     let speechService = SpeechService()
 
-    private static let apiKeyName = "anthropic_api_key"
-    private static let defaultAPIKey = "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"
+    private static let apiKeyDefaultsKey = "anthropic_api_key"
 
     init() {
-        let key = KeychainService.load(key: Self.apiKeyName) ?? Self.defaultAPIKey
-        anthropicService = AnthropicService(apiKey: key)
-        hasAPIKey = true
+        if let key = UserDefaults.standard.string(forKey: Self.apiKeyDefaultsKey), !key.isEmpty {
+            anthropicService = AnthropicService(apiKey: key)
+            hasAPIKey = true
+        }
 
         speechService.requestPermissions()
         speechService.onTranscription = { [weak self] text in
@@ -39,10 +39,11 @@ final class WalkieViewModel: ObservableObject {
     }
 
     func setAPIKey(_ key: String) {
-        if KeychainService.save(key: Self.apiKeyName, value: key) {
-            anthropicService = AnthropicService(apiKey: key)
-            hasAPIKey = true
-        }
+        let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        UserDefaults.standard.set(trimmed, forKey: Self.apiKeyDefaultsKey)
+        anthropicService = AnthropicService(apiKey: trimmed)
+        hasAPIKey = true
     }
 
     func startTransmitting() {
