@@ -82,13 +82,14 @@ final class WalkieViewModel: ObservableObject {
                 partialResponse += chunk
             }
 
+            // Play the moment the work is done — browser/result is opening right now
+            SoundEffects.playSuccess()
+
             let finalText = partialResponse.isEmpty ? "[No response]" : partialResponse
             let assistantMessage = Message(role: .assistant, content: finalText)
             messages.append(assistantMessage)
             partialResponse = ""
             isProcessing = false
-
-            SoundEffects.playSuccess()
 
             if isSpeakingEnabled {
                 speechService.speak(finalText)
