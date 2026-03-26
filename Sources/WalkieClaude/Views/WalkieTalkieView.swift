@@ -56,32 +56,8 @@ struct WalkieTalkieView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
 
-                // Channel selector
-                HStack(spacing: 0) {
-                    ForEach(Mode.allCases, id: \.self) { mode in
-                        Button {
-                            viewModel.currentMode = mode
-                        } label: {
-                            Text(mode.rawValue)
-                                .font(.system(size: 11, weight: .bold, design: .monospaced))
-                                .foregroundColor(viewModel.currentMode == mode ? .black : .gray)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 6)
-                                .background(
-                                    viewModel.currentMode == mode
-                                        ? Color.orange
-                                        : Color(white: 0.2)
-                                )
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .padding(.horizontal, 16)
-
-                // Working directory picker (CODE mode only)
-                if viewModel.currentMode == .code {
-                    Button {
+                // Working directory picker
+                Button {
                         let panel = NSOpenPanel()
                         panel.canChooseFiles = false
                         panel.canChooseDirectories = true
@@ -118,7 +94,6 @@ struct WalkieTalkieView: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.horizontal, 16)
-                }
 
                 // Transcript area
                 ScrollViewReader { proxy in

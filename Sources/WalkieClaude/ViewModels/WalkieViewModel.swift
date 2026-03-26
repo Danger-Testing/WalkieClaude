@@ -1,17 +1,11 @@
 import Foundation
 import SwiftUI
 
-enum Mode: String, CaseIterable {
-    case chat = "CHAT"
-    case code = "CODE"
-}
-
 @MainActor
 final class WalkieViewModel: ObservableObject {
     @Published var messages: [Message] = []
     @Published var isListening = false
     @Published var isProcessing = false
-    @Published var currentMode: Mode = .chat
     @Published var selectedRepo: URL?
     @Published var isSpeakingEnabled = false
     @Published var partialResponse = ""
@@ -19,7 +13,6 @@ final class WalkieViewModel: ObservableObject {
     @Published var currentAPIKey: String = ""
     @Published var liveTranscription = ""
 
-    private var anthropicService: AnthropicService?
     private let cliService = CLIService()
     let speechService = SpeechService()
 
@@ -27,7 +20,6 @@ final class WalkieViewModel: ObservableObject {
 
     init() {
         if let key = UserDefaults.standard.string(forKey: Self.apiKeyDefaultsKey), !key.isEmpty {
-            anthropicService = AnthropicService(apiKey: key)
             currentAPIKey = key
             hasAPIKey = true
         }
@@ -44,7 +36,6 @@ final class WalkieViewModel: ObservableObject {
         let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         UserDefaults.standard.set(trimmed, forKey: Self.apiKeyDefaultsKey)
-        anthropicService = AnthropicService(apiKey: trimmed)
         currentAPIKey = trimmed
         hasAPIKey = true
     }
@@ -77,27 +68,13 @@ final class WalkieViewModel: ObservableObject {
         isProcessing = true
         partialResponse = ""
 
-        if currentMode == .code {
-            if let repo = selectedRepo {
-                cliService.repoURL = repo
-            }
+        if let repo = selectedRepo {
+            cliService.repoURL = repo
         }
 
         Task {
-            let stream: AsyncStream<String>
-            if currentMode == .chat {
-                guard let service = anthropicService else {
-                    let errMsg = Message(role: .assistant, content: "[No API key configured]")
-                    messages.append(errMsg)
-                    isProcessing = false
-                    return
-                }
-                stream = service.sendMessage(trimmed)
-            } else {
-                // Pass last 10 messages as context so Claude Code remembers the conversation
-                let history = messages.dropLast().suffix(10).map { (role: $0.role.rawValue, content: $0.content) }
-                stream = cliService.sendMessage(trimmed, history: Array(history))
-            }
+            let history = messages.dropLast().suffix(10).map { (role: $0.role.rawValue, content: $0.content) }
+            let stream = cliService.sendMessage(trimmed, history: Array(history))
 
             for await chunk in stream {
                 partialResponse += chunk
