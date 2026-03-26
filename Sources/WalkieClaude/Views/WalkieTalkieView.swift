@@ -4,6 +4,7 @@ struct WalkieTalkieView: View {
     @StateObject private var viewModel = WalkieViewModel()
     @State private var inputText = ""
     @State private var apiKeyInput = ""
+    @State private var showingKeyEditor = false
 
     var body: some View {
         ZStack {
@@ -11,7 +12,6 @@ struct WalkieTalkieView: View {
             RoundedRectangle(cornerRadius: 24)
                 .fill(Color(nsColor: NSColor(red: 0.12, green: 0.12, blue: 0.13, alpha: 1.0)))
                 .overlay(
-                    // Subtle grid pattern
                     Canvas { context, size in
                         let spacing: CGFloat = 12
                         for x in stride(from: 0, through: size.width, by: spacing) {
@@ -33,6 +33,17 @@ struct WalkieTalkieView: View {
                         .font(.system(size: 14, weight: .heavy, design: .monospaced))
                         .foregroundColor(.orange)
                     Spacer()
+                    // Edit API key button
+                    Button {
+                        apiKeyInput = viewModel.currentAPIKey
+                        showingKeyEditor = true
+                    } label: {
+                        Image(systemName: "key.fill")
+                            .foregroundColor(viewModel.hasAPIKey ? .gray : .orange)
+                            .font(.system(size: 12))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.trailing, 6)
                     // Speaker toggle
                     Button {
                         viewModel.isSpeakingEnabled.toggle()
@@ -245,33 +256,55 @@ struct WalkieTalkieView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)
             }
-            // API key entry overlay
-            if !viewModel.hasAPIKey {
+
+            // API key panel — shown on first launch OR when editing
+            if !viewModel.hasAPIKey || showingKeyEditor {
                 RoundedRectangle(cornerRadius: 24)
                     .fill(Color(nsColor: NSColor(red: 0.08, green: 0.08, blue: 0.09, alpha: 0.97)))
-                VStack(spacing: 20) {
-                    Image(systemName: "key.fill")
-                        .font(.system(size: 32))
-                        .foregroundColor(.orange)
-                    Text("ENTER API KEY")
-                        .font(.system(size: 14, weight: .heavy, design: .monospaced))
-                        .foregroundColor(.orange)
-                    Text("Get yours at console.anthropic.com")
+                VStack(spacing: 16) {
+                    HStack {
+                        Image(systemName: "key.fill")
+                            .foregroundColor(.orange)
+                        Text(showingKeyEditor ? "EDIT API KEY" : "ENTER API KEY")
+                            .font(.system(size: 14, weight: .heavy, design: .monospaced))
+                            .foregroundColor(.orange)
+                        Spacer()
+                        if showingKeyEditor {
+                            Button {
+                                showingKeyEditor = false
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 12))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+
+                    Text("console.anthropic.com → API Keys")
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundColor(.gray)
-                    SecureField("sk-ant-...", text: $apiKeyInput)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    // Plain text so you can see exactly what's stored
+                    TextField("sk-ant-api03-...", text: $apiKeyInput)
                         .textFieldStyle(.plain)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(.green)
                         .padding(10)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(white: 0.15))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(white: 0.25), lineWidth: 1))
+                                .fill(Color(white: 0.1))
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange.opacity(0.4), lineWidth: 1))
                         )
-                        .onSubmit { viewModel.setAPIKey(apiKeyInput) }
+                        .onSubmit {
+                            viewModel.setAPIKey(apiKeyInput)
+                            showingKeyEditor = false
+                        }
+
                     Button {
                         viewModel.setAPIKey(apiKeyInput)
+                        showingKeyEditor = false
                     } label: {
                         Text("CONNECT")
                             .font(.system(size: 12, weight: .bold, design: .monospaced))
@@ -284,10 +317,15 @@ struct WalkieTalkieView: View {
                     .buttonStyle(.plain)
                     .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-                .padding(32)
+                .padding(28)
             }
         }
         .frame(width: 320, height: 480)
+        .onAppear {
+            if !viewModel.hasAPIKey {
+                apiKeyInput = ""
+            }
+        }
     }
 }
 

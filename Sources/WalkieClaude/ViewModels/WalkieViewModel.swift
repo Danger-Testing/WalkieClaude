@@ -16,6 +16,7 @@ final class WalkieViewModel: ObservableObject {
     @Published var isSpeakingEnabled = false
     @Published var partialResponse = ""
     @Published var hasAPIKey = false
+    @Published var currentAPIKey: String = ""
     @Published var liveTranscription = ""
 
     private var anthropicService: AnthropicService?
@@ -27,6 +28,7 @@ final class WalkieViewModel: ObservableObject {
     init() {
         if let key = UserDefaults.standard.string(forKey: Self.apiKeyDefaultsKey), !key.isEmpty {
             anthropicService = AnthropicService(apiKey: key)
+            currentAPIKey = key
             hasAPIKey = true
         }
 
@@ -43,6 +45,7 @@ final class WalkieViewModel: ObservableObject {
         guard !trimmed.isEmpty else { return }
         UserDefaults.standard.set(trimmed, forKey: Self.apiKeyDefaultsKey)
         anthropicService = AnthropicService(apiKey: trimmed)
+        currentAPIKey = trimmed
         hasAPIKey = true
     }
 
