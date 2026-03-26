@@ -16,11 +16,20 @@ struct WalkieClaudeApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var panel: NSPanel?
     private var hotKeyRef: EventHotKeyRef?
+    private var globalPTTMonitor: Any?
+    private var isTransmitting = false
+
+    // Shared so WalkieTalkieRadioView can observe it
+    @MainActor let viewModel = WalkieViewModel()
+
+    // PTT key: Cmd+Shift+"  (keyCode 39)
+    private let pttKeyCode: UInt16 = 39
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         createPanel()
         registerHotKey()
+        setupGlobalPTT()
     }
 
     private func createPanel() {
@@ -45,7 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let rootView: AnyView = FeatureFlags.classicUI
             ? AnyView(WalkieTalkieView())
-            : AnyView(WalkieTalkieRadioView())
+            : AnyView(WalkieTalkieRadioView(viewModel: viewModel))
 
         let hostingView = NSHostingView(rootView: rootView)
         panel.contentView = hostingView
@@ -54,6 +63,34 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         panel.orderFrontRegardless()
 
         self.panel = panel
+    }
+
+    // Global PTT monitor — lives for the entire app lifetime, works even when
+    // the panel is hidden or another app has focus.
+    private func setupGlobalPTT() {
+        let isPTT: (NSEvent) -> Bool = { [weak self] event in
+            guard let self else { return false }
+            return event.keyCode == self.pttKeyCode &&
+                   event.modifierFlags.contains(.command) &&
+                   event.modifierFlags.contains(.shift)
+        }
+
+        globalPTTMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in
+            guard let self, isPTT(event) else { return }
+            DispatchQueue.main.async {
+                if event.type == .keyDown && !event.isARepeat && !self.isTransmitting {
+                    self.isTransmitting = true
+                    // Show panel if hidden so the user can see what's happening
+                    if let panel = self.panel, !panel.isVisible {
+                        panel.orderFrontRegardless()
+                    }
+                    self.viewModel.startTransmitting()
+                } else if event.type == .keyUp && self.isTransmitting {
+                    self.isTransmitting = false
+                    self.viewModel.stopTransmitting()
+                }
+            }
+        }
     }
 
     private func registerHotKey() {

@@ -2,13 +2,12 @@ import SwiftUI
 import AppKit
 
 struct WalkieTalkieRadioView: View {
-    @StateObject private var viewModel = WalkieViewModel()
+    @ObservedObject var viewModel: WalkieViewModel
     @State private var isTransmitting = false
     @State private var channelNumber: Int = 1
     @State private var gradientAngle: Double = 0
     @State private var timer: Timer? = nil
     @State private var localMonitor: Any?
-    @State private var globalMonitor: Any?
 
     // Cmd+Shift+" — apostrophe/quote key = 39
     private let pttKeyCode: UInt16 = 39
@@ -66,6 +65,8 @@ struct WalkieTalkieRadioView: View {
             event.modifierFlags.contains(.command) &&
             event.modifierFlags.contains(.shift)
         }
+        // Local monitor only — consumes the keystroke so it doesn't bleed into other apps
+        // when WalkieClaude has focus. Global PTT is handled by AppDelegate.
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { event in
             if isPTT(event) {
                 DispatchQueue.main.async {
@@ -81,23 +82,10 @@ struct WalkieTalkieRadioView: View {
             }
             return event
         }
-        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .keyUp]) { event in
-            guard isPTT(event) else { return }
-            DispatchQueue.main.async {
-                if event.type == .keyDown && !event.isARepeat && !self.isTransmitting {
-                    self.isTransmitting = true
-                    self.viewModel.startTransmitting()
-                } else if event.type == .keyUp && self.isTransmitting {
-                    self.isTransmitting = false
-                    self.viewModel.stopTransmitting()
-                }
-            }
-        }
     }
 
     private func removePTT() {
-        if let m = localMonitor  { NSEvent.removeMonitor(m) }
-        if let m = globalMonitor { NSEvent.removeMonitor(m) }
+        if let m = localMonitor { NSEvent.removeMonitor(m) }
     }
 
     // MARK: - Scan animation (processing state)
