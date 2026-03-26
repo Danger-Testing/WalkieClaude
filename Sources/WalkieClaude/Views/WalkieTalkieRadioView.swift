@@ -7,6 +7,11 @@ struct WalkieTalkieRadioView: View {
     @State private var channelNumber: Int = 1
     @State private var gradientAngle: Double = 0
     @State private var timer: Timer? = nil
+    @State private var localMonitor: Any?
+    @State private var globalMonitor: Any?
+
+    // Right Shift keyCode = 60
+    private let pttKeyCode: UInt16 = 60
 
     private let displayW: CGFloat = 250
     private let displayH: CGFloat = 735
@@ -42,6 +47,8 @@ struct WalkieTalkieRadioView: View {
                     viewModel.stopTransmitting()
                 }
         )
+        .onAppear { setupPTT() }
+        .onDisappear { removePTT() }
         .onChange(of: viewModel.isProcessing) { _, processing in
             if processing {
                 startScanAnimation()
@@ -49,6 +56,31 @@ struct WalkieTalkieRadioView: View {
                 stopScanAnimation()
             }
         }
+    }
+
+    // MARK: - Right Shift PTT
+
+    private func setupPTT() {
+        let handler: (NSEvent) -> Void = { [self] event in
+            guard event.keyCode == pttKeyCode else { return }
+            let shiftDown = event.modifierFlags.contains(.shift)
+            DispatchQueue.main.async {
+                if shiftDown && !isTransmitting {
+                    isTransmitting = true
+                    viewModel.startTransmitting()
+                } else if !shiftDown && isTransmitting {
+                    isTransmitting = false
+                    viewModel.stopTransmitting()
+                }
+            }
+        }
+        localMonitor  = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged)  { e in handler(e); return e }
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged, handler: handler)
+    }
+
+    private func removePTT() {
+        if let m = localMonitor  { NSEvent.removeMonitor(m) }
+        if let m = globalMonitor { NSEvent.removeMonitor(m) }
     }
 
     // MARK: - Scan animation (processing state)

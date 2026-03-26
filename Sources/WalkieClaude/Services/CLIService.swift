@@ -19,10 +19,9 @@ final class CLIService: @unchecked Sendable {
                         let label = turn.role == "user" ? "User said" : "You responded"
                         fullPrompt += "\(label): \(turn.content)\n"
                     }
-                    fullPrompt += "[END CONTEXT]\n\nNew request to execute now: \(text)"
-                } else {
-                    fullPrompt = text
+                    fullPrompt += "[END CONTEXT]\n\n"
                 }
+                fullPrompt += "IMPORTANT: After completing any task that creates files, starts a server, or produces output — immediately run it or open it (e.g. open HTML in browser, start dev server, run the script). Do not just create files and stop.\n\nRequest: \(text)"
 
                 process.arguments = ["-p", fullPrompt, "--dangerously-skip-permissions"]
 
@@ -59,10 +58,6 @@ final class CLIService: @unchecked Sendable {
                 }
 
                 process.waitUntilExit()
-
-                // Auto-open any HTML file created/modified in the last 10 seconds
-                self.openRecentHTMLFile(in: workDir)
-
                 continuation.finish()
             }
 
@@ -72,25 +67,4 @@ final class CLIService: @unchecked Sendable {
         }
     }
 
-    private func openRecentHTMLFile(in directory: URL) {
-        let fm = FileManager.default
-        guard let files = try? fm.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.contentModificationDateKey]) else { return }
-
-        let cutoff = Date().addingTimeInterval(-10)
-        let recentHTML = files
-            .filter { $0.pathExtension.lowercased() == "html" }
-            .compactMap { url -> (URL, Date)? in
-                guard let date = try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate else { return nil }
-                return (url, date)
-            }
-            .filter { $0.1 > cutoff }
-            .sorted { $0.1 > $1.1 }
-            .first?.0
-
-        if let htmlURL = recentHTML {
-            DispatchQueue.main.async {
-                NSWorkspace.shared.open(htmlURL)
-            }
-        }
-    }
 }
