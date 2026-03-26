@@ -1,19 +1,32 @@
 import Foundation
+import AppKit
 
 final class CLIService: @unchecked Sendable {
     private let claudePath = "/Users/carlostmayers/.nvm/versions/node/v22.6.0/bin/claude"
     var repoURL: URL?
 
-    func sendMessage(_ text: String) -> AsyncStream<String> {
+    func sendMessage(_ text: String, history: [(role: String, content: String)] = []) -> AsyncStream<String> {
         AsyncStream { continuation in
             let task = Task.detached {
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: self.claudePath)
-                process.arguments = ["-p", text, "--dangerously-skip-permissions"]
 
-                if let repoURL = self.repoURL {
-                    process.currentDirectoryURL = repoURL
+                // Build prompt with conversation history for context
+                var fullPrompt = ""
+                if !history.isEmpty {
+                    fullPrompt += "Previous conversation:\n"
+                    for turn in history {
+                        fullPrompt += "\(turn.role == "user" ? "User" : "Assistant"): \(turn.content)\n"
+                    }
+                    fullPrompt += "\nCurrent request: \(text)"
+                } else {
+                    fullPrompt = text
                 }
+
+                process.arguments = ["-p", fullPrompt, "--dangerously-skip-permissions"]
+
+                let workDir = self.repoURL ?? URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Downloads")
+                process.currentDirectoryURL = workDir
 
                 let pipe = Pipe()
                 process.standardOutput = pipe
@@ -45,11 +58,37 @@ final class CLIService: @unchecked Sendable {
                 }
 
                 process.waitUntilExit()
+
+                // Auto-open any HTML file created/modified in the last 10 seconds
+                self.openRecentHTMLFile(in: workDir)
+
                 continuation.finish()
             }
 
             continuation.onTermination = { _ in
                 task.cancel()
+            }
+        }
+    }
+
+    private func openRecentHTMLFile(in directory: URL) {
+        let fm = FileManager.default
+        guard let files = try? fm.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.contentModificationDateKey]) else { return }
+
+        let cutoff = Date().addingTimeInterval(-10)
+        let recentHTML = files
+            .filter { $0.pathExtension.lowercased() == "html" }
+            .compactMap { url -> (URL, Date)? in
+                guard let date = try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate else { return nil }
+                return (url, date)
+            }
+            .filter { $0.1 > cutoff }
+            .sorted { $0.1 > $1.1 }
+            .first?.0
+
+        if let htmlURL = recentHTML {
+            DispatchQueue.main.async {
+                NSWorkspace.shared.open(htmlURL)
             }
         }
     }

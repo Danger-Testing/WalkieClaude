@@ -95,7 +95,7 @@ struct WalkieTalkieView: View {
                             Image(systemName: "folder.fill")
                                 .font(.system(size: 10))
                                 .foregroundColor(.orange)
-                            Text(viewModel.selectedRepo?.lastPathComponent ?? "Pick working directory...")
+                            Text(viewModel.selectedRepo?.lastPathComponent ?? "Downloads (default)")
                                 .font(.system(size: 11, design: .monospaced))
                                 .foregroundColor(viewModel.selectedRepo == nil ? .gray : .white)
                                 .lineLimit(1)

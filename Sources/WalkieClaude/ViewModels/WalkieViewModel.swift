@@ -94,7 +94,9 @@ final class WalkieViewModel: ObservableObject {
                 }
                 stream = service.sendMessage(trimmed)
             } else {
-                stream = cliService.sendMessage(trimmed)
+                // Pass last 10 messages as context so Claude Code remembers the conversation
+                let history = messages.dropLast().suffix(10).map { (role: $0.role.rawValue, content: $0.content) }
+                stream = cliService.sendMessage(trimmed, history: Array(history))
             }
 
             for await chunk in stream {
