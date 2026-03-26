@@ -10,8 +10,8 @@ struct WalkieTalkieRadioView: View {
     @State private var localMonitor: Any?
     @State private var globalMonitor: Any?
 
-    // Right Shift keyCode = 60
-    private let pttKeyCode: UInt16 = 60
+    // Cmd+Shift+" — apostrophe/quote key = 39
+    private let pttKeyCode: UInt16 = 39
 
     private let displayW: CGFloat = 250
     private let displayH: CGFloat = 735
@@ -61,21 +61,38 @@ struct WalkieTalkieRadioView: View {
     // MARK: - Right Shift PTT
 
     private func setupPTT() {
-        let handler: (NSEvent) -> Void = { [self] event in
-            guard event.keyCode == pttKeyCode else { return }
-            let shiftDown = event.modifierFlags.contains(.shift)
+        let isPTT: (NSEvent) -> Bool = { event in
+            event.keyCode == self.pttKeyCode &&
+            event.modifierFlags.contains(.command) &&
+            event.modifierFlags.contains(.shift)
+        }
+        localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { event in
+            if isPTT(event) {
+                DispatchQueue.main.async {
+                    if event.type == .keyDown && !event.isARepeat && !self.isTransmitting {
+                        self.isTransmitting = true
+                        self.viewModel.startTransmitting()
+                    } else if event.type == .keyUp && self.isTransmitting {
+                        self.isTransmitting = false
+                        self.viewModel.stopTransmitting()
+                    }
+                }
+                return nil // consume the event
+            }
+            return event
+        }
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .keyUp]) { event in
+            guard isPTT(event) else { return }
             DispatchQueue.main.async {
-                if shiftDown && !isTransmitting {
-                    isTransmitting = true
-                    viewModel.startTransmitting()
-                } else if !shiftDown && isTransmitting {
-                    isTransmitting = false
-                    viewModel.stopTransmitting()
+                if event.type == .keyDown && !event.isARepeat && !self.isTransmitting {
+                    self.isTransmitting = true
+                    self.viewModel.startTransmitting()
+                } else if event.type == .keyUp && self.isTransmitting {
+                    self.isTransmitting = false
+                    self.viewModel.stopTransmitting()
                 }
             }
         }
-        localMonitor  = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged)  { e in handler(e); return e }
-        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged, handler: handler)
     }
 
     private func removePTT() {
