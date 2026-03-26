@@ -1,32 +1,45 @@
 import AVFoundation
 
 struct SoundEffects {
-    private static var player: AVAudioPlayer?
+    // Retain all active players — without this they deallocate before finishing
+    private static var players: [AVAudioPlayer] = []
+    private static var loopingPlayer: AVAudioPlayer?
 
     static func playBeep() {
         play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/beep-one.mp4")
     }
 
     static func playTalking() {
-        play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/talking-walkie.mp4", loops: true)
+        loopingPlayer?.stop()
+        loopingPlayer = nil
+        if let p = makePlayer(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/talking-walkie.mp4") {
+            p.numberOfLoops = -1
+            p.play()
+            loopingPlayer = p
+        }
     }
 
     static func playSuccess() {
-        stopTalking()
+        loopingPlayer?.stop()
+        loopingPlayer = nil
         play(path: "/Users/carlostmayers/Downloads/walkie talkie sounds/success.mp4")
     }
 
-    static func stopTalking() {
-        player?.stop()
-        player = nil
+    private static func play(path: String) {
+        guard let p = makePlayer(path: path) else { return }
+        players.append(p)
+        p.play()
+        // Clean up finished players periodically
+        players.removeAll { !$0.isPlaying && $0 !== players.last }
     }
 
-    private static func play(path: String, loops: Bool = false) {
+    private static func makePlayer(path: String) -> AVAudioPlayer? {
         let url = URL(fileURLWithPath: path)
-        guard let p = try? AVAudioPlayer(contentsOf: url) else { return }
-        p.numberOfLoops = loops ? -1 : 0
+        guard let p = try? AVAudioPlayer(contentsOf: url) else {
+            print("[SoundEffects] Failed to load: \(path)")
+            return nil
+        }
         p.prepareToPlay()
-        p.play()
-        if loops { player = p } // retain looping player
+        return p
     }
 }
