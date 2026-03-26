@@ -1,0 +1,68 @@
+{
+  "": {
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/master.swiftdeps"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Helpers/SoundEffects.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Models/Message.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/AnthropicService.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/CLIService.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/KeychainService.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/SpeechService.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/ViewModels/WalkieViewModel.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Views/WalkieTalkieView.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.dia"
+  },
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/WalkieClaudeApp.swift": {
+    "dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.d",
+    "object": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.swift.o",
+    "swiftmodule": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.swiftdeps",
+    "diagnostics": "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.dia"
+  }
+}

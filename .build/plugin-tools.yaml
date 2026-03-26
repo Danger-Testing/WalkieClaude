@@ -1,0 +1,81 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "WalkieClaude-arm64-apple-macosx26.0-debug.exe": ["<WalkieClaude-arm64-apple-macosx26.0-debug.exe>"]
+  "WalkieClaude-arm64-apple-macosx26.0-debug.module": ["<WalkieClaude-arm64-apple-macosx26.0-debug.module>"]
+  "main": ["<WalkieClaude-arm64-apple-macosx26.0-debug.exe>","<WalkieClaude-arm64-apple-macosx26.0-debug.module>"]
+  "test": ["<WalkieClaude-arm64-apple-macosx26.0-debug.exe>","<WalkieClaude-arm64-apple-macosx26.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude":
+    is-mutated: true
+commands:
+  "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude-entitlement.plist":
+    tool: write-auxiliary-file
+    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
+    outputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude-entitlement.plist"]
+    description: "Write auxiliary file /Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude-entitlement.plist"
+
+  "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Helpers/SoundEffects.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Models/Message.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/AnthropicService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/CLIService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/KeychainService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/SpeechService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/ViewModels/WalkieViewModel.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Views/WalkieTalkieView.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/WalkieClaudeApp.swift"]
+    outputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/sources"]
+    description: "Write auxiliary file /Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/sources"
+
+  "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.swift.o"]
+    outputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.product/Objects.LinkFileList"
+
+  "/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<WalkieClaude-arm64-apple-macosx26.0-debug.exe>":
+    tool: phony
+    inputs: ["<WalkieClaude-arm64-apple-macosx26.0-debug.exe-CodeSigning>"]
+    outputs: ["<WalkieClaude-arm64-apple-macosx26.0-debug.exe>"]
+
+  "<WalkieClaude-arm64-apple-macosx26.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/Modules/WalkieClaude.swiftmodule"]
+    outputs: ["<WalkieClaude-arm64-apple-macosx26.0-debug.module>"]
+
+  "C.WalkieClaude-arm64-apple-macosx26.0-debug.exe":
+    tool: shell
+    inputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.product/Objects.LinkFileList"]
+    outputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/WalkieClaude"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug","-o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude","-module-name","WalkieClaude","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-alias","-Xlinker","_WalkieClaude_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-Xlinker","-add_ast_path","-Xlinker","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/Modules/WalkieClaude.swiftmodule","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g"]
+
+  "C.WalkieClaude-arm64-apple-macosx26.0-debug.exe-entitlements":
+    tool: shell
+    inputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude-entitlement.plist"]
+    outputs: ["<WalkieClaude-arm64-apple-macosx26.0-debug.exe-CodeSigning>"]
+    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/WalkieClaude"
+    args: ["codesign","--force","--sign","-","--entitlements","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude-entitlement.plist","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude"]
+
+  "C.WalkieClaude-arm64-apple-macosx26.0-debug.module":
+    tool: shell
+    inputs: ["/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Helpers/SoundEffects.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Models/Message.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/AnthropicService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/CLIService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/KeychainService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Services/SpeechService.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/ViewModels/WalkieViewModel.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/Views/WalkieTalkieView.swift","/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/WalkieClaudeApp.swift","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/sources"]
+    outputs: ["/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SoundEffects.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/Message.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/AnthropicService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/CLIService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/KeychainService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/SpeechService.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieViewModel.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieTalkieView.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/WalkieClaudeApp.swift.o","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/Modules/WalkieClaude.swiftmodule"]
+    description: "Compiling Swift Module 'WalkieClaude' (9 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","WalkieClaude","-emit-dependencies","-emit-module","-emit-module-path","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/Modules/WalkieClaude.swiftmodule","-output-file-map","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/output-file-map.json","-incremental","-c","@/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/WalkieClaude.build/sources","-I","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx14.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j12","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/carlostmayers/app danger/WalkieClaude/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","WalkieClaude_main","-swift-version","5","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","walkieclaude"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/carlostmayers/app danger/WalkieClaude/Sources/WalkieClaude/","/Users/carlostmayers/app danger/WalkieClaude/Package.swift","/Users/carlostmayers/app danger/WalkieClaude/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+
