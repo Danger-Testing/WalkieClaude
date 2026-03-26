@@ -20,6 +20,8 @@ struct WalkieTalkieRadioView: View {
             walkieImage
                 .resizable()
                 .frame(width: displayW, height: displayH)
+                .animation(nil, value: gradientAngle)   // never animate the SVG
+                .animation(nil, value: channelNumber)
 
             lcdScreen
                 .frame(width: lcdW, height: lcdH)
@@ -54,10 +56,9 @@ struct WalkieTalkieRadioView: View {
     private func startScanAnimation() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.35, repeats: true) { _ in
+            // No withAnimation here — animations are scoped locally on the LCD only
             channelNumber = Int.random(in: 10...99)
-            withAnimation(.linear(duration: 0.35)) {
-                gradientAngle += 45
-            }
+            gradientAngle += 45
         }
     }
 
@@ -85,6 +86,7 @@ struct WalkieTalkieRadioView: View {
             // Background — static when idle/transmitting, animated gradient when processing
             RoundedRectangle(cornerRadius: 4)
                 .fill(lcdFill)
+                .animation(.linear(duration: 0.3), value: gradientAngle)
 
             RoundedRectangle(cornerRadius: 4)
                 .fill(Color.black.opacity(0.05))
